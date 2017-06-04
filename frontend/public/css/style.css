@@ -1,0 +1,239 @@
+.header {
+    background-image: url("../img/header.png");
+    /*padding: 5vh 30%;*/
+    margin-bottom: 6vh;
+    max-height: 20vh;
+    -moz-box-shadow: inset 0 -5px 10px -2px black;
+    -webkit-box-shadow: inset 0 -5px 10px -2px black;
+    box-shadow: inset 0 -5px 10px -2px black;
+}
+
+.search-field-wrapper {
+    padding: 5vh 30%;
+}
+
+.profile-wrapper {
+    margin: 2vh 0;
+    padding: 2vh;
+    border-bottom: solid darkgrey;
+}
+
+.search-bar {
+    -moz-box-shadow: 5px 5px 5px black;
+    -webkit-box-shadow: 5px 5px 5px  black;
+    box-shadow: 5px 5px 5px black;
+}
+
+.coverArt {
+    border-radius: 8px;
+}
+.hoverContainer {
+    position: relative;
+}
+.overlay {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 100%;
+    width: 100%;
+    opacity: 0;
+    border-radius: 8px;
+    transition: .5s ease;
+    background-color: black;
+}
+.hoverContainer:hover .overlay {
+    opacity: 0.8;
+}
+
+.remove-tag {
+    color: red;
+}
+.remove-tag:hover {
+    color: darkred;
+}
+
+.textOverlay {
+    color: #1DB954;
+    font-size: 70px;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    -ms-transform: translate(-50%, -50%);
+}
+
+.tracks-scrollable {
+    height:300px;
+    overflow-y:scroll;
+}
+
+.row.is-flex {
+    display: flex;
+    flex-wrap: wrap;
+}
+.row.is-flex > [class*='col-'] {
+    display: flex;
+    flex-direction: column;
+}
+
+/*
+* And with max cross-browser enabled.
+* Nobody should ever write this by hand.
+* Use a preprocesser with autoprefixing.
+*/
+.row.is-flex {
+    display: -webkit-box;
+    display: -webkit-flex;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-flex-wrap: wrap;
+    -ms-flex-wrap: wrap;
+    flex-wrap: wrap;
+}
+
+.row.is-flex > [class*='col-'] {
+    display: -webkit-box;
+    display: -webkit-flex;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-orient: vertical;
+    -webkit-box-direction: normal;
+    -webkit-flex-direction: column;
+    -ms-flex-direction: column;
+    flex-direction: column;
+}
+
+.add-playlist-container {
+    margin-top: 20px;
+
+}
+
+.profile {
+    padding: 10px;
+    background-color: white;
+}
+
+.playlist-button-group {
+    width: 100%;
+}
+
+.playlist-button-group > button {
+    width: 46%;
+    margin: 1%;
+    padding: 5px;
+    border: none;
+    border-radius: 30px;
+    color: #ffffff;
+    font-weight: bold;
+}
+
+.button-green,.button-red,
+.button-disabled,.button-black {
+    outline:none;
+}
+
+.button-green {
+    background-color: #1DB954;
+}
+.button-red {
+    background-color: #b90c14;
+}
+.button-disabled {
+    background-color: #a9a9a9;
+}
+.button-black {
+    background-color: #000000;
+}
+
+.button-green:hover {
+    background-color: #1ece5b;
+}
+.button-red:hover {
+    background-color: #d80c14;
+}
+.button-black:hover {
+    background-color: #2e2e2e;
+}
+
+.button-green:active {
+    background-color: #1DB954;
+}
+.button-red:active {
+    background-color: #b90c14;
+}
+.button-disabled:active {
+    background-color: #a9a9a9;
+}
+.button-black:active {
+    background-color: #000000;
+}
+
+
+
+/* For extra small screens col-xs-* */
+@media (max-width: 767px) {
+    .search-field-wrapper {
+        /*height:50px;*/
+        padding: 20px 5px;
+        margin-bottom: 20px;
+        /*-moz-box-shadow: none;*/
+        /*-webkit-box-shadow: none;*/
+        /*box-shadow: none;*/
+    }
+
+    .search-bar {
+        -moz-box-shadow: none;
+        -webkit-box-shadow: none;
+        box-shadow: none;
+    }
+
+}
+
+/* For small screens col-sm-* */
+@media (min-width: 768px ) and (max-width: 991px) {
+
+}
+
+/* For medium screens col-md-* */
+@media (min-width: 992px) and (max-width: 1199px) {
+
+}
+
+
+@media only screen and (max-width : 767px) {
+    .row.equal-height {
+        display: flex;
+        flex-wrap: wrap;
+    }
+    .row.equal-height > [class*='col-'] {
+        display: flex;
+        flex-direction: column;
+    }
+    .row.equal-height.row:after,
+    .row.equal-height.row:before {
+        display: flex;
+    }
+
+    .row.equal-height > [class*='col-'] > .thumbnail,
+    .row.equal-height > [class*='col-'] > .thumbnail > .caption {
+        display: flex;
+        flex: 1 0 auto;
+        flex-direction: column;
+    }
+    .row.equal-height > [class*='col-'] > .thumbnail > .caption > .flex-text {
+        flex-grow: 1;
+    }
+    .row.equal-height > [class*='col-'] > .thumbnail > img {
+        width: 100%;
+        height: 200px; /* force image's height */
+
+        /* force image fit inside it's "box" */
+        -webkit-object-fit: cover;
+        -moz-object-fit: cover;
+        -ms-object-fit: cover;
+        -o-object-fit: cover;
+        object-fit: cover;
+    }
+}

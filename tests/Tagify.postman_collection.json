@@ -1,0 +1,191 @@
+{
+	"variables": [],
+	"info": {
+		"name": "Tagify",
+		"_postman_id": "9ff576ec-037a-832d-951c-cd46d36e7a76",
+		"description": "",
+		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "http://127.0.0.1:5000/init_db",
+			"request": {
+				"url": "http://127.0.0.1:5000/init_db",
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"description": ""
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"user_id\":\"hakis\",\n\t\"playlist_id\":\"1234\",\n\t\"tags\":[\"rock\", \"punk\"]\n}"
+				},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "http://127.0.0.1:5000/playlist",
+			"request": {
+				"url": "http://127.0.0.1:5000/playlist",
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"description": ""
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"user_id\":\"emil\",\n\t\"id\":\"1337\",\n\t\"url\":\"www.spotify.com\"\n}"
+				},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "http://127.0.0.1:5000/playlist/tag",
+			"request": {
+				"url": "http://127.0.0.1:5000/playlist/tag",
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"description": ""
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"id\":\"1337\",\n\t\"tags\":[\"punk\"]\n}"
+				},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "http://127.0.0.1:5000/playlist/tag",
+			"request": {
+				"url": "http://127.0.0.1:5000/playlist/tag",
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"description": ""
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"id\":\"1337\",\n\t\"tags\":[\"rock\", \"punk\"]\n}"
+				},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "http://127.0.0.1:5000/playlist/tag",
+			"request": {
+				"url": "http://127.0.0.1:5000/playlist/tag",
+				"method": "DELETE",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"description": ""
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"id\":\"1337\",\n\t\"tags\":[\"punk\"]\n}"
+				},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "http://127.0.0.1:5000/playlist",
+			"request": {
+				"url": "http://127.0.0.1:5000/playlist/user_id/emil",
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"description": ""
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"user_id\":\"hakis\",\n\t\"playlist_id\":\"1234\",\n\t\"tags\":[\"rock\", \"punk\"]\n}"
+				},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "http://127.0.0.1:5000/playlist/:tags",
+			"request": {
+				"url": "http://127.0.0.1:5000/playlist/tag/1337",
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"description": ""
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"user_id\":\"hakis\",\n\t\"playlist_id\":\"1234\",\n\t\"tags\":[\"rock\", \"punk\"]\n}"
+				},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "http://127.0.0.1:5000/playlist/tag/:id",
+			"request": {
+				"url": "http://127.0.0.1:5000/playlist/search/{\"tags\": [\"rock\",\"pop\"]}",
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"description": ""
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"user_id\":\"hakis\",\n\t\"playlist_id\":\"1234\",\n\t\"tags\":[\"rock\", \"punk\"]\n}"
+				},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "http://127.0.0.1:5000/playlist",
+			"request": {
+				"url": "http://127.0.0.1:5000/playlist",
+				"method": "DELETE",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"description": ""
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"id\":\"1337\"\n}"
+				},
+				"description": ""
+			},
+			"response": []
+		}
+	]
+}
