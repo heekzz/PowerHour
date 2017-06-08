@@ -9,8 +9,6 @@ import Loading from 'halogen/PulseLoader';
  * Component for the index page that either shows the login dialog or the search field
  */
 export default class IndexPage extends React.Component {
-
-
     render() {
         let content;
         // Render search field if logged in
@@ -19,10 +17,10 @@ export default class IndexPage extends React.Component {
         	content = <App />;
         else {
             content = (
-            	<div className="container">
+            	<div className="container text-center">
                     <Loading color='#000000' margin="4px" size='40px' />
 	            </div>
-            )
+            );
         }
         return (
             <div className="home">

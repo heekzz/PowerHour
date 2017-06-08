@@ -20,14 +20,17 @@ export default class Layout extends React.Component {
         this.checkSpotifyToken(this);
     }
 
+    redirect() {
+    	window.location = '/auth/login';
+    }
+
     // Check with backend if token is valid
     checkSpotifyToken(component) {
         console.log("Access token: " + cookie.load("spotify_access_token"));
-        fetch('/loggedin', {credentials: 'include'})
+        fetch('/auth/loggedin', {credentials: 'include'})
             .then(response => response.json())
             .then(json => {
                 localStorage.setItem("loggedin", json.loggedin);
-                console.log(json);
                 if (json.loggedin) {
                     localStorage.setItem("user_id", json.user.id);
                     localStorage.setItem("username", json.user.name);
@@ -39,7 +42,8 @@ export default class Layout extends React.Component {
                 else {
                     component.setState({
                         loggedin: json.loggedin
-                    })
+                    });
+	                this.redirect();
                 }
             })
     }
