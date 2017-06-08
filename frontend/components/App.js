@@ -4,6 +4,7 @@
 import React from 'react';
 import PlaylistPicker from './PlaylistPicker';
 import DisplayPlaylist from './DisplayPlaylist';
+import SignalPicker from './SignalPicker';
 import {Col, Row, Image, Grid, Button} from 'react-bootstrap';
 
 
@@ -12,10 +13,12 @@ export default class App extends React.Component {
 		super(props);
 		this.state = {
 			displayPlaylist: '',
-			playlist: ""
+			playlist: "",
+			signal: "",
 		};
 		this.displayPlaylist = this.displayPlaylist.bind(this);
 		this.choosePlaylist = this.choosePlaylist.bind(this);
+		this.chooseSignal = this.chooseSignal.bind(this);
 	}
 
 	componentDidMount() {
@@ -55,6 +58,13 @@ export default class App extends React.Component {
 		window.location = '#chooseSignal';
 	}
 
+	chooseSignal(signal) {
+		this.setState({
+			signal: signal
+		});
+		window.location = "#play";
+	}
+
 
 
 	render() {
@@ -83,7 +93,7 @@ export default class App extends React.Component {
 				</div>
 				<div className="section">
 					<Grid>
-						<p>Choose signal</p>
+						<SignalPicker chooseSignal={this.chooseSignal} />
 					</Grid>
 				</div>
 				<div className="section">
