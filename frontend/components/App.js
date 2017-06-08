@@ -5,7 +5,8 @@ import React from 'react';
 import PlaylistPicker from './PlaylistPicker';
 import DisplayPlaylist from './DisplayPlaylist';
 import SignalPicker from './SignalPicker';
-import {Col, Row, Image, Grid, Button} from 'react-bootstrap';
+import Play from './Play';
+import {Grid, Button} from 'react-bootstrap';
 
 
 export default class App extends React.Component {
@@ -98,7 +99,7 @@ export default class App extends React.Component {
 				</div>
 				<div className="section">
 					<Grid>
-						<p>Play</p>
+						<Play playlist={this.state.playlist} signal={this.state.signal} />
 					</Grid>
 				</div>
 			</div>
