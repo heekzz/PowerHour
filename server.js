@@ -10,18 +10,11 @@ const favicon = require('serve-favicon');
 const path = require('path');
 const config = require('./config');
 
-let client_id, client_secret;
-if (process.env.NODE_ENV !== 'production') {
-	const spotify = require('./spotifyCredentials');
-	client_id = spotify.client_id;
-	client_secret = spotify.client_secret;
-}
-
 const redirect_uri = config.spotify_callback; // Your redirect uri
 
 passport.use(new SpotifyStrategy({
-	clientID: process.env.SPOTIFY_CLIENT_ID || client_id,
-	clientSecret: process.env.SPOTIFY_CLIENT_SECRET || client_secret,
+	clientID: process.env.SPOTIFY_CLIENT_ID,
+	clientSecret: process.env.SPOTIFY_CLIENT_SECRET,
 	callbackURL: redirect_uri
 }, function (accessToken, refreshToken, profile, done) {
 	process.nextTick(function () {
@@ -71,7 +64,7 @@ app.use(passport.initialize());
 // .. also support for Passport persistent login sessions
 app.use(passport.session());
 
-app.get('/', function (req, res) {;
+app.get('/', function (req, res) {
 	res.render('index')
 });
 
