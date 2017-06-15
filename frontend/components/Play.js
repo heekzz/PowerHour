@@ -4,40 +4,37 @@
 
 
 import React from 'react';
+import fetch from 'isomorphic-fetch';
 import {Row, Col, Button} from 'react-bootstrap';
 
 
 export default class Play extends React.Component {
-	constructor(props) {
-		super(props);
-		this.playGame = this.playGame.bind(this);
-		this.play = this.play.bind(this);
-	}
+    constructor(props) {
+        super(props);
+        this.playGame = this.playGame.bind(this);
+    }
 
 
-	componentDidMount() {
+    componentDidMount() {
 
-	}
+    }
 
-	playGame() {
-		if (this.props.playlist === "") {
-			alert("You didn't choose a playlist!");
-			window.location = "#choosePlaylist";
-		} else if (this.props.signal === "") {
-			alert("You didn't choose a signal!");
-			window.location = "#chooseSignal";
-		} else {
-			alert("PLAYING GAME!!!");
-			this.play()
-		}
-	}
+    playGame() {
+        if (this.props.playlist === "") {
+            alert("You didn't choose a playlist!");
+            window.location = "#choosePlaylist";
+        } else if (this.props.signal === "") {
+            alert("You didn't choose a signal!");
+            window.location = "#chooseSignal";
+        } else {
+            alert("PLAYING GAME!!!");
+            this.props.play()
+        }
+    }
+	
 
-	play() {
-
-	}
-
-	render() {
-		return (
+    render() {
+        return (
 			<Row>
 				<Col xs={12} >
 					<h1>Let's play!</h1>
@@ -46,6 +43,6 @@ export default class Play extends React.Component {
 					<Button bsStyle="primary" onClick={this.playGame} >Play</Button>
 				</Col>
 			</Row>
-		)
-	}
+        )
+    }
 }

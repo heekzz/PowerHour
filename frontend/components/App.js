@@ -7,69 +7,84 @@ import DisplayPlaylist from './DisplayPlaylist';
 import SignalPicker from './SignalPicker';
 import Play from './Play';
 import {Grid, Button} from 'react-bootstrap';
+const Game = require('./Game');
 
 
 export default class App extends React.Component {
-	constructor(props) {
-		super(props);
-		this.state = {
-			displayPlaylist: '',
-			playlist: "",
-			signal: "",
-		};
-		this.displayPlaylist = this.displayPlaylist.bind(this);
-		this.choosePlaylist = this.choosePlaylist.bind(this);
-		this.chooseSignal = this.chooseSignal.bind(this);
-	}
+    constructor(props) {
+        super(props);
+        this.state = {
+            displayPlaylist: '',
+            playlist: '',
+            signal: '',
+            game: ''
+        };
+        this.displayPlaylist = this.displayPlaylist.bind(this);
+        this.choosePlaylist = this.choosePlaylist.bind(this);
+        this.chooseSignal = this.chooseSignal.bind(this);
+        this.playGame = this.playGame.bind(this);
+    }
 
-	componentDidMount() {
-		let options = {
-			sectionClassName:       'section',
-			anchors:                ['start', 'choosePlaylist', 'chooseSignal', 'play'],
-			scrollBar:              false,
-			navigation:             true,
-			verticalCentered:       false,
-			sectionPaddingTop:      '50px',
-			sectionPaddingBottom:   '50px',
-			arrowNavigation:        true,
-			scrollOverflow:         true,
-		};
+    componentDidMount() {
+        let options = {
+            sectionClassName:       'section',
+            anchors:                ['start', 'choosePlaylist', 'chooseSignal', 'play'],
+            scrollBar:              false,
+            navigation:             true,
+            verticalCentered:       false,
+            sectionPaddingTop:      '50px',
+            sectionPaddingBottom:   '50px',
+            arrowNavigation:        true,
+            scrollOverflow:         true,
+        };
 
-		// Init fullpage.js
-		$('#fullpage').fullpage(options);
+        // Init fullpage.js
+        $('#fullpage').fullpage(options);
 
-		// Disable manual scrolling
-		$.fn.fullpage.setMouseWheelScrolling(false);
-		$.fn.fullpage.setAllowScrolling(false);
+        // Disable manual scrolling
+        $.fn.fullpage.setMouseWheelScrolling(false);
+        $.fn.fullpage.setAllowScrolling(false);
 
-	}
+    }
 
-	// Set playlist to display
-	displayPlaylist(playlist) {
-		this.setState({
-			displayPlaylist: playlist
-		});
-	}
-
-
-	choosePlaylist(playlist) {
-		this.setState({
-			playlist: playlist
-		});
-		window.location = '#chooseSignal';
-	}
-
-	chooseSignal(signal) {
-		this.setState({
-			signal: signal
-		});
-		window.location = "#play";
-	}
+    // Set playlist to display
+    displayPlaylist(playlist) {
+        this.setState({
+            displayPlaylist: playlist
+        });
+    }
 
 
+    choosePlaylist(playlist) {
+        this.setState({
+            playlist: playlist
+        });
+        window.location = '#chooseSignal';
+    }
 
-	render() {
-		return (
+    chooseSignal(signal) {
+        this.setState({
+            signal: signal
+        });
+        window.location = "#play";
+    }
+
+
+    /**
+     * PLAYING THE GAME!!!!
+     *
+     * TODO: Be able to order playlist if possible??
+     */
+    playGame() {
+        let playlist = this.state.playlist;
+        let signal = this.state.signal;
+        Game.start(playlist, signal);
+    }
+
+
+
+    render() {
+        return (
 			<div id="fullpage">
 				<div className="section">
 					<Grid>
@@ -99,12 +114,12 @@ export default class App extends React.Component {
 				</div>
 				<div className="section">
 					<Grid>
-						<Play playlist={this.state.playlist} signal={this.state.signal} />
+						<Play playlist={this.state.playlist} signal={this.state.signal} play={this.playGame} />
 					</Grid>
 				</div>
 			</div>
 
-		)
-	}
+        )
+    }
 
 }
