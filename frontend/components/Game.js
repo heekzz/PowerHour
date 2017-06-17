@@ -2,7 +2,7 @@
  * This file contains all the logic for the game from the moment you are pressing "PLAY"
  */
 import async from 'async';
-
+let sig;
 /**
  * Initiates the whole game and starts the selected playlist
  *
@@ -11,8 +11,8 @@ import async from 'async';
  */
 function start(playlist, signal) {
   let startGame = () => {
-    // for (let x = 0; x < 60; x++) {
     let count = 0;
+    sig = signal;
     async.whilst(
         function() { return count < 60;},
         function(callback) {
@@ -28,7 +28,6 @@ function start(playlist, signal) {
                 console.log('ERROR: ' + err);
               else {
                 count++;
-                console.log(JSON.stringify(result));
                 console.log('Count: ' + count);
                 callback(null, count);
               }
@@ -36,7 +35,6 @@ function start(playlist, signal) {
           });
         }
     )
-    // }
   };
 
   startPlaylist(playlist, startGame);
@@ -70,7 +68,7 @@ function startTimer(signalLength) {
   return new Promise(function (resolve, reject) {
     setTimeout(() => {
       resolve({message: "Waited 60 seconds..."});
-    }, 6000 - (signalLength))
+    }, 60000 - (signalLength))
   });
 }
 
@@ -89,10 +87,12 @@ function pauseSong(callback) {
   });
 }
 
-function playSignal(signal, callback) {
+function playSignal(res, callback) {
+  let audio = new Audio(sig.url);
+  audio.play();
   setTimeout(() => {
     callback(null, 'done');
-  }, 4000);
+  }, sig.length);
 }
 
 function nextSong(status, callback) {
