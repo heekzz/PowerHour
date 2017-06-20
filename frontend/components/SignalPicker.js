@@ -5,54 +5,60 @@
 import React from 'react';
 import {Grid, Row, Col, Button, Panel} from 'react-bootstrap';
 import sounds from '../data/drinkSounds';
+import { Howl } from 'howler'
 
 export default class SignalPicker extends React.Component {
-	constructor(props) {
-		super(props);
-		this.state = {
-			signal: '',
-		};
-		this.chooseSignal = this.chooseSignal.bind(this);
-	}
+  constructor(props) {
+    super(props);
+    this.state = {
+      signal: '',
+    };
+    this.chooseSignal = this.chooseSignal.bind(this);
+  }
 
-	componentDidMount() {
-	}
+  componentDidMount() {
+  }
 
-	chooseSignal(sound) {
-		this.setState({
-			signal: sound.id,
-		});
-		this.props.chooseSignal(sound);
-	}
+  chooseSignal(sound) {
+    this.setState({
+      signal: sound.id,
+    });
+    this.props.chooseSignal(sound);
+  }
 
-
-	getSounds() {
-		return (
-			sounds.map((sound, key) => (
-					<Col xs={12} sm={6}  md={4} key={sound.id} >
-						<Panel>
-							<h4>{sound.name}</h4>
-							<audio controls>
-								<source src={sound.url} type="audio/mp3" />
-							</audio>
-							<Button bsStyle="primary" onClick={() => this.chooseSignal(sound)} >Choose signal</Button>
-						</Panel>
-					</Col>
-				)
-			)
-		)
-	}
+  playSignal(signal) {
+    new Howl({
+      src: [signal.url]
+    }).play();
+  }
 
 
-	render () {
-		return (
-			<Row className="show-grid" >
-				<Col>
-					<h1>Choose signal</h1>
-					<p>Choose a signal that will play when it's time to drink!</p>
-				</Col>
-				{this.getSounds()}
-			</Row>
-		)
-	}
+  getSounds() {
+    return (
+        sounds.map((sound, key) => (
+                <Col xs={12} sm={12}  md={12} key={sound.id} >
+                  <Panel header={<h2><b>{sound.name}</b></h2>} >
+                    <div className="playlist-button-group">
+                      <Button bsClass="button-black"  onClick={() => this.playSignal(sound)} >Play</Button>
+                      <Button bsClass="button-green" onClick={() => this.chooseSignal(sound)} >Choose signal</Button>
+                    </div>
+                  </Panel>
+                </Col>
+            )
+        )
+    )
+  }
+
+
+  render () {
+    return (
+        <Row className="show-grid" >
+          <Col>
+            <h1>Choose signal</h1>
+            <p>Choose a signal that will play when it's time to drink!</p>
+          </Col>
+          {this.getSounds()}
+        </Row>
+    )
+  }
 }

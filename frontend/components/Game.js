@@ -2,6 +2,7 @@
  * This file contains all the logic for the game from the moment you are pressing "PLAY"
  */
 import async from 'async';
+import { Howl } from 'howler';
 let sig;
 /**
  * Initiates the whole game and starts the selected playlist
@@ -88,7 +89,9 @@ function pauseSong(callback) {
 }
 
 function playSignal(res, callback) {
-  let audio = new Audio(sig.url);
+  let audio = new Howl({
+    src: [sig.url]
+  });
   audio.play();
   setTimeout(() => {
     callback(null, 'done');

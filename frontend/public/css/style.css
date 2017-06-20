@@ -122,11 +122,13 @@
 .playlist-button-group > button {
     width: 46%;
     margin: 1%;
-    padding: 5px;
     border: none;
     border-radius: 30px;
     color: #ffffff;
-    font-weight: bold;
+    font-weight: 500;
+    text-align: center;
+    text-transform: uppercase;
+    padding: 7px;
 }
 
 .button-green,.button-red,
