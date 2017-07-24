@@ -99,8 +99,6 @@ function playSignal(res, callback) {
 }
 
 function nextSong(status, callback) {
-  console.log(status);
-  console.log('Next song');
   fetch('/api/player/next',
       {
         credentials: 'include',
@@ -110,8 +108,6 @@ function nextSong(status, callback) {
     return response.json()
   })
   .then(json => {
-    console.log('--- Next song ---');
-    console.log(json);
     callback(null, json);
   });
 }

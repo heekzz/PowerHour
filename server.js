@@ -29,30 +29,31 @@ passport.use(new SpotifyStrategy({
 //   the user by ID when deserializing. However, since this example does not
 //   have a database of user records, the complete spotify profile is serialized
 //   and deserialized.
-passport.serializeUser(function(user, done) {
+passport.serializeUser(function (user, done) {
   done(null, user);
 });
 
-passport.deserializeUser(function(obj, done) {
+passport.deserializeUser(function (obj, done) {
   done(null, obj);
 });
 
-
 function isAuthenticated(req, res, next) {
-  if (req.isAuthenticated())
+  if (req.isAuthenticated()) {
     return next();
+  }
   res.send(req.body);
   // res.redirect('/');
 }
 
 let app = express();
 
-app.use(express.static(path.join(__dirname ,'frontend', 'public')))
+app.use(express.static(path.join(__dirname, 'frontend', 'public')))
 .use(cookieParser());
 
-app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.urlencoded({extended: false}));
 
-app.use(favicon(path.join(__dirname, 'frontend', 'public', 'img', 'favicon.ico')));
+app.use(
+    favicon(path.join(__dirname, 'frontend', 'public', 'img', 'favicon.ico')));
 
 app.use(bodyParser.json());
 
@@ -67,7 +68,6 @@ app.use(passport.session());
 app.get('/', function (req, res) {
   res.render('index')
 });
-
 
 /**
  * Checks if a user is logged in by sending a request with the access token to Spotify.
@@ -85,15 +85,13 @@ app.get('/auth/loggedin', function (req, res) {
     // Set options for request to Spotify API
     let options = {
       url: 'https://api.spotify.com/v1/me',
-      headers: { 'Authorization': 'Bearer ' + spotify_access_token },
+      headers: {'Authorization': 'Bearer ' + spotify_access_token},
       json: true
     };
 
-
-
     // Try access
-    request.get(options, function(error, response, body) {
-      let status_code  = response.statusCode;
+    request.get(options, function (error, response, body) {
+      let status_code = response.statusCode;
       if (status_code === 200) {
         data.user = {id: body.id, name: body.display_name};
         data.loggedin = true;
@@ -117,10 +115,13 @@ app.get('/auth/loggedin', function (req, res) {
 app.get('/auth/login',
     passport.authenticate('spotify',
         {
-          scope: ['user-read-private', 'user-read-email', 'playlist-modify-private', 'playlist-modify-public',
-            'user-modify-playback-state', 'user-read-playback-state', 'user-read-currently-playing'],
-          showDialog: true}),
-    function(req, res) {
+          scope: ['user-read-private', 'user-read-email',
+            'playlist-modify-private', 'playlist-modify-public',
+            'user-modify-playback-state', 'user-read-playback-state',
+            'user-read-currently-playing'],
+          showDialog: true
+        }),
+    function (req, res) {
       // Will not be called...
     }
 );
@@ -128,13 +129,14 @@ app.get('/auth/login',
 /**
  * Callback endpoint for the Spotify Authentication using passport
  */
-app.get('/auth/callback', passport.authenticate('spotify', {failureRedirect: '/'}), function(req, res) {
+app.get('/auth/callback',
+    passport.authenticate('spotify', {failureRedirect: '/'}),
+    function (req, res) {
       let spotify_access_token = req.user || null;
       res.cookie("spotify_access_token", spotify_access_token);
       res.redirect('/');
     }
 );
-
 
 /**
  * Fetches playlists of logged in from Spotify
@@ -148,14 +150,15 @@ app.get('/api/user/me/playlist', function (req, res) {
     // Set options for request to Spotify API
     let options = {
       url: `https://api.spotify.com/v1/me/playlists`,
-      headers: { 'Authorization': 'Bearer ' + spotify_access_token},
+      headers: {'Authorization': 'Bearer ' + spotify_access_token},
       json: true
     };
     request.get(options, function (error, response, body) {
-      if (error)
-        res.send(error);
-      else
+      if (error) {
         res.send(body);
+      } else {
+        res.send(body);
+      }
     })
   }
 });
@@ -172,14 +175,15 @@ app.get('/api/user/:user_id/playlist/:playlist_id', function (req, res) {
     // Set options for request to Spotify API
     let options = {
       url: `https://api.spotify.com/v1/users/${req.params.user_id}/playlists/${req.params.playlist_id}`,
-      headers: { 'Authorization': 'Bearer ' + spotify_access_token},
+      headers: {'Authorization': 'Bearer ' + spotify_access_token},
       json: true
     };
     request.get(options, function (error, response, body) {
-      if (!error && response.statusCode === 200)
+      if (!error && response.statusCode === 200) {
         res.send(body);
-      else
-        res.send(error);
+      } else {
+        res.send(body);
+      }
     })
   }
 });
@@ -187,7 +191,7 @@ app.get('/api/user/:user_id/playlist/:playlist_id', function (req, res) {
 /**
  * Starts playing a provided playlist
  */
-app.post('/api/player/start', function(req, res) {
+app.post('/api/player/start', function (req, res) {
   let spotify_access_token = req.cookies.spotify_access_token || null;
   if (spotify_access_token === null) {
     res.status(403);
@@ -203,11 +207,11 @@ app.post('/api/player/start', function(req, res) {
       body: body
     };
     request.put(options, function (error, response, body) {
-      console.log(body + " Code: " + response.statusCode);
-      if (!error && response.statusCode === 204)
-        res.send({status:'success'});
-      else
-        res.send(error);
+      if (!error && response.statusCode === 204) {
+        res.send({status: 'success'});
+      } else {
+        res.send(body);
+      }
     })
 
   }
@@ -216,7 +220,7 @@ app.post('/api/player/start', function(req, res) {
 /**
  * Pauses the playback
  */
-app.put('/api/player/pause', function(req, res) {
+app.put('/api/player/pause', function (req, res) {
   let spotify_access_token = req.cookies.spotify_access_token || null;
   if (spotify_access_token === null) {
     req.status(403);
@@ -227,12 +231,13 @@ app.put('/api/player/pause', function(req, res) {
       headers: {'Authorization': 'Bearer ' + spotify_access_token,},
       json: true,
     };
-    request.put(options, function(error, response, body) {
+    request.put(options, function (error, response, body) {
       console.log(JSON.stringify(response));
-      if (!error && response.statusCode === 204)
+      if (!error && response.statusCode === 204) {
         res.send({status: 'success'});
-      else
+      } else {
         res.send(body);
+      }
     })
   }
 });
@@ -240,7 +245,7 @@ app.put('/api/player/pause', function(req, res) {
 /**
  * Skips to next song
  */
-app.put('/api/player/next', function(req, res) {
+app.put('/api/player/next', function (req, res) {
   let spotify_access_token = req.cookies.spotify_access_token || null;
   if (spotify_access_token === null) {
     res.status(403);
@@ -252,10 +257,18 @@ app.put('/api/player/next', function(req, res) {
       json: true
     };
     request.post(options, function (error, response, body) {
-      if (!error && response.statusCode === 204)
-        res.send({status:'success'});
-      else
+      if (!error && response.statusCode === 204) {
+        options.url = `https://api.spotify.com/v1/me/player/seek?position_ms=60000`;
+        request.put(options, function (err_seek, res_seek, body_seek) {
+          if (!err_seek && res_seek.statusCode === 204) {
+            res.send({status: 'success'});
+          } else {
+            res.send(body_seek);
+          }
+        })
+      } else {
         res.send(body);
+      }
     })
   }
 });
