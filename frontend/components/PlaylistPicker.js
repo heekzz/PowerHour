@@ -92,7 +92,7 @@ export default class PlaylistPicker extends React.Component {
   /**
    * Checks if the url holds the correct format for fetching a Spotify playlist
    */
-  static validUrl(url) {
+  validUrl(url) {
     let regexp = /https:\/\/open.spotify.com\/user\/\w+\/playlist\/\w+/g;
     let match = regexp.exec(url);
     return match === null ? 'error': 'success';
