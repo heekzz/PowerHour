@@ -2,7 +2,6 @@
 
 import React from 'react';
 import App from './App';
-import Loading from 'halogen/PulseLoader';
 
 
 /*
@@ -12,15 +11,11 @@ export default class IndexPage extends React.Component {
     render() {
         let content;
         // Render search field if logged in
-        if(this.props.loggedin)
-            // Otherwise we show login Modal
-        	content = <App />;
+        if (this.props.loggedin)
+        // Otherwise we show login Modal
+            content = <App />;
         else {
-            content = (
-            	<div className="container text-center">
-                    <Loading color='#000000' margin="4px" size='40px' />
-	            </div>
-            );
+            content = <h1>Loading</h1>;
         }
         return (
             <div className="home">
