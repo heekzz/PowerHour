@@ -172,6 +172,27 @@
     background-color: #000000;
 }
 
+.sticky-footer {
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    min-height: 100px;
+    line-height: 60px;
+    background-color: #f5f5f5;
+}
+
+.fill {
+    animation: fill 20s linear 1;
+}
+
+@keyframes fill {
+    0% {
+        width: 0%;
+    }
+    100% {
+        width: 100%;
+    }
+}
 
 
 /* For extra small screens col-xs-* */
@@ -239,3 +260,4 @@
         object-fit: cover;
     }
 }
+

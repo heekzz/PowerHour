@@ -19,7 +19,6 @@ export default class IndexPage extends React.Component {
         }
         return (
             <div className="home">
-                {console.log("Logged in: " + this.props.loggedin)}
                 {/* Display login button if not logged in, otherwise show search field */}
                 {content}
             </div>
