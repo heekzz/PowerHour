@@ -3,6 +3,7 @@
  */
 import async from 'async';
 import { Howl } from 'howler';
+import SpotifyAPI from './SpotifyAPI'
 let sig;
 /**
  * Initiates the whole game and starts the selected playlist
@@ -10,105 +11,100 @@ let sig;
  * @param playlist playlist to play
  * @param signal signal to play in between the songs
  */
-function start(playlist, signal) {
-  let startGame = () => {
-    let count = 0;
-    sig = signal;
-    async.whilst(
-        function() { return count < 60;},
-        function(callback) {
-          startTimer(signal.length).then((response) => {
-            console.log(response.message);
-            console.log('Running pause, play and next');
-            async.waterfall([
-              pauseSong,
-              playSignal,
-              nextSong
-            ], function(err, result) {
-              if (err)
-                console.log('ERROR: ' + err);
-              else {
-                count++;
-                console.log('Count: ' + count);
-                callback(null, count);
-              }
+
+export default class Game {
+
+    constructor(mPlayer, mStartProgressbar) {
+        this.player = mPlayer;
+        this.startProgressbar = mStartProgressbar;
+        this.pauseSong = this.pauseSong.bind(this);
+        this.nextSong = this.nextSong.bind(this);
+        this.playSignal = this.playSignal.bind(this);
+    }
+
+    start(playlist, signal) {
+        let startTimer = this.startTimer;
+        let pauseSong = this.pauseSong;
+        let playSignal = this.playSignal;
+        let nextSong = this.nextSong;
+        let startGame = () => {
+            let count = 0;
+            sig = signal;
+            async.whilst(
+                function () {
+                    return count < 60;
+                },
+                function (callback) {
+                    startTimer(signal.length).then((response) => {
+                        console.debug(response.message);
+                        console.debug('Running pause, play and next');
+                        async.waterfall([
+                            pauseSong,
+                            playSignal,
+                            nextSong
+                        ], function (err, result) {
+                            if (err)
+                                console.debug('ERROR: ' + err);
+                            else {
+                                count++;
+                                console.debug('Count: ' + count);
+                                callback(null, count);
+                            }
+                        })
+                    });
+                }
+            )
+        };
+
+        this.startPlaylist(playlist, startGame);
+    }
+
+
+    startPlaylist(playlist, callback) {
+        this.startProgressbar();
+        // Plays first track in playlist
+        SpotifyAPI.play(playlist.uri, () => {
+            callback();
+            console.log('Started playlist: "' + playlist.name + '"')
+        });
+    }
+
+    nextSong(status, callback) {
+        let seek = 45 * 1000;
+        this.startProgressbar();
+        this.player.nextTrack().then(() => {
+            console.log("Next song...");
+            this.player.seek(seek).then(() => {
+                console.debug("Seeking " + seek/1000 + "s");
+                callback(null, 'done');
             })
-          });
-        }
-    )
-  };
+        });
+    }
 
-  startPlaylist(playlist, startGame);
+    pauseSong(callback) {
+        this.player.pause().then(() => {
+            console.log("Paused music...")
+            callback(null, 'done');
+        })
+    }
+
+    startTimer(signalLength) {
+        console.debug("Starting timer");
+        return new Promise(function (resolve, reject) {
+            setTimeout(() => {
+                resolve({message: "Waited 60 seconds..."});
+            }, 60000 - (signalLength))
+        });
+    }
+
+    playSignal(res, callback) {
+        let audio = new Howl({
+            src: [sig.url]
+        });
+        audio.play();
+        setTimeout(() => {
+            callback(null, 'done');
+        }, sig.length);
+    }
+
 }
-
-
-function startPlaylist(playlist, callback) {
-  let data = {};
-  data.uri = playlist.uri;
-  // Plays first track in playlist
-  fetch('/api/player/start',
-      {
-        credentials: 'include',
-        method: 'POST',
-        headers: {
-          'Accept': 'application/json',
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(data),
-      })
-  .then(response => response.json())
-  .then((json) => {
-    console.log(json);
-    if (json.status === 'success')
-      callback();
-  });
-}
-
-function startTimer(signalLength) {
-  console.log("Starting timer");
-  return new Promise(function (resolve, reject) {
-    setTimeout(() => {
-      resolve({message: "Waited 60 seconds..."});
-    }, 60000 - (signalLength))
-  });
-}
-
-function pauseSong(callback) {
-  console.log('Pausing song');
-  fetch('/api/player/pause',
-      {
-        credentials: 'include',
-        method: 'PUT',
-      })
-  .then(response => response.json())
-  .then(json => {
-    console.log('--- Pause song ---');
-    console.log(json);
-    callback(null, json);
-  });
-}
-
-function playSignal(res, callback) {
-  let audio = new Howl({
-    src: [sig.url]
-  });
-  audio.play();
-  setTimeout(() => {
-    callback(null, 'done');
-  }, sig.length);
-}
-
-function nextSong(status, callback) {
-  fetch('/api/player/next',
-      {
-        credentials: 'include',
-        method: 'PUT'
-      })
-  .then(response => {
-    return response.json()
-  })
-  .then(json => {
-    callback(null, json);
-  });
-}
-export { start };
