@@ -2,13 +2,14 @@
  * Created by Fredrik on 2017-06-04.
  */
 import React from 'react';
+import {Grid, Button} from 'react-bootstrap';
 import PlaylistPicker from './PlaylistPicker';
 import DisplayPlaylist from './DisplayPlaylist';
 import SignalPicker from './SignalPicker';
 import Play from './Play';
-import {Grid, Button} from 'react-bootstrap';
 import Player from './Player';
 import Game from './Game';
+import StartPage from './StartPage'
 
 
 export default class App extends React.Component {
@@ -22,6 +23,7 @@ export default class App extends React.Component {
             player: '',
             fill: false,
             playing: false,
+            playNextSong: false
         };
         this.displayPlaylist = this.displayPlaylist.bind(this);
         this.choosePlaylist = this.choosePlaylist.bind(this);
@@ -117,8 +119,10 @@ export default class App extends React.Component {
         }
     }
 
-    playGame() {
-        this.game.start(this.state.playlist, this.state.signal);
+    // Game duration in minutes and track time in seconds
+    playGame(gameDuration, trackTime, playNextSong) {
+        this.game.start(this.state.playlist, this.state.signal, gameDuration, trackTime, playNextSong);
+        this.setState ({ playNextSong: playNextSong, trackTime: trackTime });
     }
 
     startProgressBar() {
@@ -135,7 +139,7 @@ export default class App extends React.Component {
             if(this.state.playing) {
                 return (
                     <footer className="sticky-footer fp-auto-height">
-                        <Player player={this.state.player} fill={this.state.fill}  />
+                        <Player player={this.state.player} fill={this.state.fill} trackTime={this.state.trackTime}  />
                     </footer>
                 )
             } else {
@@ -148,17 +152,7 @@ export default class App extends React.Component {
                 <div id="fullpage">
                     <div className="section">
                         <Grid>
-                            <h1>Welcome to PowerHour!</h1>
-                            <p>This is the drinking game called PowerHour (<a href="https://en.wikipedia.org/wiki/Power_hour">Wikipedia</a>).
-                                The rules are simple. Drink a shot of beer every minute for 60 minutes (1 hour).
-                                Every time the music changes and the choosen signal plays, you take a shot</p>
-                            <p>How-to:</p>
-                            <ol>
-                                <li>Choose a playlist from Spotify</li>
-                                <li>Choose signal to play when to drink</li>
-                                <li>Start playing!</li>
-                            </ol>
-                            <Button bsStyle="primary" onClick={() => window.location='#choosePlaylist'}>Start</Button>
+                            <StartPage />
                         </Grid>
                     </div>
                     <div className="section">

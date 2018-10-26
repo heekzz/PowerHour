@@ -39,6 +39,7 @@ export default class Player extends React.Component {
 
 
     render() {
+        let barStyle = this.props.fill ? {animation: `fill ${this.props.trackTime}ms linear 1`} : {};
         let currentTrack = '';
         let currentArtist = '';
         let nextTrack = '';
@@ -58,17 +59,16 @@ export default class Player extends React.Component {
                 <Grid>
                     <Row>
                         <Col md={6} sm={12}>
-                            <b>Now playing:</b> {currentTrack} - {currentArtist} &nbsp;&nbsp;
+                            <p><b>Now playing:</b> {currentTrack} - {currentArtist}</p>
                         </Col>
-                        <Col md={6} sm={12}>
-                            <b>Next track:</b> {nextTrack} - {nextArtist}
+                        < Col md={6} sm={12} xsHidden={true}>
+                            <p><b>Next track:</b> {nextTrack} - {nextArtist}</p>
                         </Col>
                     </Row>
                     <Row>
                         <Col md={12} sm={12}>
                             <div className="progress">
-                                <div className={"progress-bar "} style={this.props.fill ? {animation: 'fill' +
-                                        ' 60s linear 1'}: {}}></div>
+                                <div className={"progress-bar"} style={barStyle} />
                             </div>
                         </Col>
                     </Row>

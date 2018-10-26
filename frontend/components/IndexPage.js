@@ -2,6 +2,9 @@
 
 import React from 'react';
 import App from './App';
+import {
+    Grid,
+} from 'react-bootstrap'
 
 
 /*
@@ -15,7 +18,17 @@ export default class IndexPage extends React.Component {
         // Otherwise we show login Modal
             content = <App />;
         else {
-            content = <h1>Loading</h1>;
+            content = (
+                <Grid>
+                    <div className='loading-text' >
+                        <h1>Loading</h1>
+                    </div>
+                    <div className='spinner'>
+                        <div className='bounce1'></div>
+                        <div className='bounce2'></div>
+                        <div className='bounce3'></div>
+                    </div>
+                </Grid>);
         }
         return (
             <div className="home">
@@ -25,3 +38,4 @@ export default class IndexPage extends React.Component {
         );
     }
 }
+

@@ -150,7 +150,7 @@ app.get('/auth/callback',
 /**
  * Fetches playlists of logged in from Spotify
  */
-app.get('/api/user/me/playlist', function (req, res) {
+app.get('/api/user/me/playlist', authenticate, function (req, res) {
     let spotify_access_token = req.cookies.spotify_access_token || null;
     // Set options for request to Spotify API
     let options = {
@@ -171,11 +171,11 @@ app.get('/api/user/me/playlist', function (req, res) {
 /**
  * Fetches playlist for a user with matching user_id and playlist_id from Spotify
  */
-app.get('/api/user/:user_id/playlist/:playlist_id', function (req, res) {
+app.get('/api/playlist/:playlist_id', authenticate, function (req, res) {
     let spotify_access_token = req.cookies.spotify_access_token || null;
     // Set options for request to Spotify API
     let options = {
-        url: `https://api.spotify.com/v1/users/${req.params.user_id}/playlists/${req.params.playlist_id}`,
+        url: `https://api.spotify.com/v1/playlists/${req.params.playlist_id}`,
         headers: {'Authorization': 'Bearer ' + spotify_access_token},
         json: true
     };
@@ -183,15 +183,68 @@ app.get('/api/user/:user_id/playlist/:playlist_id', function (req, res) {
         if (!error && response.statusCode === 200) {
             res.send(body);
         } else {
-            res.send(body);
+            res.status(response.statusCode).send(body);
         }
     })
+});
+
+app.get('/api/playlist/:playlist_id/tracks', authenticate, function (req, res) {
+    let spotify_access_token = req.cookies.spotify_access_token || null;
+    // Set options for request to Spotify API
+    let options = {
+        url: `https://api.spotify.com/v1/playlists/${req.params.playlist_id}`,
+        headers: {'Authorization': 'Bearer ' + spotify_access_token},
+        json: true
+    };
+    request.get(options, function (error, response, body) {
+        if (!error && response.statusCode === 200) {
+            res.send(body);
+        } else {
+            res.status(response.statusCode).send(body);
+        }
+    })
+});
+
+app.get('/api/album/:album_id', authenticate, function (req, res) {
+    let spotify_access_token = req.cookies.spotify_access_token || null;
+    // Set options for request to Spotify API
+    let options = {
+        url: `https://api.spotify.com/v1/albums/${req.params.album_id}`,
+        headers: {'Authorization': 'Bearer ' + spotify_access_token},
+        json: true
+    };
+    request.get(options, function(error, response, body) {
+        if (!error && response.statusCode === 200) {
+            res.send(body);
+        } else {
+            res.status(response.statusCode).send(body);
+        }
+    })
+
+});
+
+app.get('/api/album/:album_id/tracks', authenticate, function (req, res) {
+    let spotify_access_token = req.cookies.spotify_access_token || null;
+    // Set options for request to Spotify API
+    let options = {
+        url: `https://api.spotify.com/v1/albums/${req.params.album_id}`,
+        headers: {'Authorization': 'Bearer ' + spotify_access_token},
+        json: true
+    };
+    request.get(options, function(error, response, body) {
+        if (!error && response.statusCode === 200) {
+            res.send(body);
+        } else {
+            res.status(response.statusCode).send(body);
+        }
+    })
+
 });
 
 /**
  * Starts playing a provided playlist
  */
-app.post('/api/player/start', function (req, res) {
+app.post('/api/player/start',authenticate, function (req, res) {
     let spotify_access_token = req.cookies.spotify_access_token || null;
     let body = { context_uri: req.body.uri,  position_ms: 30000 };
     let options = {
@@ -232,7 +285,7 @@ app.put('/api/player/pause', authenticate, function (req, res) {
 /**
  * Skips to next song
  */
-app.put('/api/player/next', function (req, res) {
+app.put('/api/player/next', authenticate, function (req, res) {
     let spotify_access_token = req.cookies.spotify_access_token || null;
     let options = {
         url: `https://api.spotify.com/v1/me/player/next`,
