@@ -17,34 +17,37 @@ export default class Game {
     constructor(mPlayer, mStartProgressbar) {
         this.player = mPlayer;
         this.startProgressbar = mStartProgressbar;
-        this.pauseSong = this.pauseSong.bind(this);
+        this.pausePlayback = this.pausePlayback.bind(this);
         this.nextSong = this.nextSong.bind(this);
         this.playSignal = this.playSignal.bind(this);
+        this.fadeIn = this.fadeIn.bind(this);
+        this.resumePlayback = this.resumePlayback.bind(this);this.sig;
     }
 
-    start(playlist, signal) {
+    start(playlist, signal, gameDuration, trackTime, playNextSong) {
         let startTimer = this.startTimer;
-        let pauseSong = this.pauseSong;
+        let pauseSong = this.pausePlayback;
         let playSignal = this.playSignal;
         let nextSong = this.nextSong;
+        let resumePlayback = this.resumePlayback;
         let startGame = () => {
             let count = 0;
             sig = signal;
             async.whilst(
                 function () {
-                    return count < 60;
+                    return count < (gameDuration)/trackTime;
                 },
                 function (callback) {
-                    startTimer(signal.length).then((response) => {
+                    startTimer(trackTime, signal.length).then((response) => {
                         console.debug(response.message);
                         console.debug('Running pause, play and next');
                         async.waterfall([
                             pauseSong,
                             playSignal,
-                            nextSong
+                            playNextSong ? nextSong : resumePlayback
                         ], function (err, result) {
                             if (err)
-                                console.debug('ERROR: ' + err);
+                                console.error(err);
                             else {
                                 count++;
                                 console.debug('Count: ' + count);
@@ -76,24 +79,35 @@ export default class Game {
             console.log("Next song...");
             this.player.seek(seek).then(() => {
                 console.debug("Seeking " + seek/1000 + "s");
-                callback(null, 'done');
+                this.fadeIn().then(() => {
+                    callback(null, 'done');
+                })
             })
         });
     }
 
-    pauseSong(callback) {
+    resumePlayback(status, callback) {
+        this.player.resume().then(() => {
+            console.log("Resuming playback...");
+            this.fadeIn().then(() => {
+                callback(null, 'done');
+            })
+        })
+    }
+
+    pausePlayback(callback) {
         this.player.pause().then(() => {
             console.log("Paused music...")
             callback(null, 'done');
         })
     }
 
-    startTimer(signalLength) {
+    startTimer(trackTime, signalLength) {
         console.debug("Starting timer");
         return new Promise(function (resolve, reject) {
             setTimeout(() => {
-                resolve({message: "Waited 60 seconds..."});
-            }, 60000 - (signalLength))
+                resolve({message: `Waited ${trackTime} seconds...`});
+            }, (trackTime))
         });
     }
 
@@ -107,4 +121,26 @@ export default class Game {
         }, sig.length);
     }
 
+    fadeIn() {
+        let player = this.player;
+        return new Promise(function (resolve, reject) {
+                let volume = 0;
+                async.whilst(
+                    function () {
+                        return volume < 1;
+                    },
+                    function (callback) {
+                        console.debug("Volume: " + volume);
+                        player.setVolume(volume).then(() => {
+                            volume += 0.1;
+                            setTimeout(() => callback(null, volume), 500);
+                        });
+                    },
+                    function (err, n) {
+                        console.error(err);
+                        resolve();
+                    });
+            },
+        );
+    }
 }
