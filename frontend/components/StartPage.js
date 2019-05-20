@@ -38,7 +38,7 @@ export default class StartPage extends React.Component {
                 </div>
                 <Button bsStyle="primary" onClick={() => window.location='#choosePlaylist'}>Start</Button>
                 <div className='drink-responsible'>
-                    <p><i>Drink responsible!</i></p>
+                    <p><i>Drink responsibly!</i></p>
                 </div>
             </Grid>
         )
